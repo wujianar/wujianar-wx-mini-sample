@@ -11,7 +11,7 @@
 
 # sample说明
 
-下载地址： https://github.com/wujianar/wujianar-wx-mini-samples
+下载地址： https://github.com/wujianar/wujianar-wx-mini-sample
 
 sample可直接运行，无需修改。
 
