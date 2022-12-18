@@ -1,0 +1,3 @@
+<view id="scanLineWrap">
+    <image class="line" src="../../images/scan-line.png" />
+</view>

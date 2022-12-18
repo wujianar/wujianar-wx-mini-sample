@@ -1,0 +1,10 @@
+<view>
+    <view class="demo-title">跟踪功能</view>
+    <canvas type="webgl" id="camera" class="camera" style="width: 100%; height: {{height}}px"></canvas>
+    <canvas class="webgl" type="webgl" id="three" style="width:100%;height:{{height}}px"></canvas>
+    <view class="offline-video" wx:if="{{videoUrl != ''}}">
+        <video id="video" src="{{videoUrl}}" loop="{{true}}" controls="{{false}}" autoplay="{{true}}" bindloadedmetadata="videoMeta" binderror="videoError" bindwaiting="videoWaiting"></video>
+    </view>
+</view>
+<scanning wx:if="{{isSearching}}" class="scanning"></scanning>
+<view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="closeTracking">X</view>

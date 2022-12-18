@@ -1,0 +1,21 @@
+{
+    "pages": [
+        "pages/index/index",
+        "pages/basic-video/basic-video",
+        "pages/basic-model/basic-model",
+        "pages/basic-camera/basic-camera",
+        "pages/basic-take-photo/basic-take-photo",
+        "pages/tracking/tracking"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "无间WebAR 微信小程序Sample",
+        "navigationBarTextStyle": "black"
+    },
+    "style": "v2",
+    "sitemapLocation": "sitemap.json",
+    "useExtendedLib": {
+        "weui": true
+    }
+}

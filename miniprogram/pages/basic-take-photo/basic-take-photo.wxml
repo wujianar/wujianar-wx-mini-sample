@@ -1,0 +1,8 @@
+<view>
+    <view class="demo-title">简单识别 - 拍照方式</view>
+    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="small" binderror="onError" style="width: 100%; height: {{height}}px;"></camera>
+    <image class="preview-img" mode="widthFix" wx:if="{{imgSrc != ''}}" src="{{imgSrc}}"></image>
+    <view class="btn-group">
+        <button type="primary" class="btn-take-photo" bindtap="takePhoto">点击识别</button>
+    </view>
+</view>

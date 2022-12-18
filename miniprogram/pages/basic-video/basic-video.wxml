@@ -1,0 +1,9 @@
+<view>
+    <view class="demo-title">简单识别 - 播放视频</view>
+    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" style="width: 100%; height: {{height}}px;"></camera>
+</view>
+<scanning wx:if="{{isSearching}}" class="scanning"></scanning>
+<view class="content" wx:if="{{videoUrl != ''}}">
+    <video class="video" src="{{videoUrl}}" autoplay="true" controls="true" loop="true"></video>
+</view>
+<view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="closeVideo">X</view>

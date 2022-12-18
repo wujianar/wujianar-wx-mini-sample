@@ -1,0 +1,30 @@
+{
+    "name": "@types/three",
+    "version": "0.134.0",
+    "description": "TypeScript definitions for three",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three",
+    "license": "MIT",
+    "contributors": [
+        {
+            "name": "Josh Ellis",
+            "url": "https://github.com/joshuaellis",
+            "githubUsername": "joshuaellis"
+        },
+        {
+            "name": "Nathan Bierema",
+            "url": "https://github.com/Methuselah96",
+            "githubUsername": "Methuselah96"
+        }
+    ],
+    "main": "",
+    "types": "index.d.ts",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+        "directory": "types/three"
+    },
+    "scripts": {},
+    "dependencies": {},
+    "typesPublisherContentHash": "081e8a2aa20cac9bb8a5fc1c65f63e7f502175cd0654faf460174999473bd0ac",
+    "typeScriptVersion": "3.7"
+}
