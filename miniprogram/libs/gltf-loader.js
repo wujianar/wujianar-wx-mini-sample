@@ -1,5 +1,5 @@
 import URL from "./url";
-import Blob from "./blob";
+import btoa from "./btoa";
 
 export function registerGLTFLoader(THREE) {
 
@@ -1966,8 +1966,7 @@ export function registerGLTFLoader(THREE) {
          * @param {number} textureIndex
          * @return {Promise<THREE.Texture>}
          */
-        GLTFParser.prototype.loadTexture = function (textureIndex) {
-
+        GLTFParser.prototype.loadTexture = async function (textureIndex) {
             var parser = this;
             var json = this.json;
             var options = this.options;
@@ -1998,69 +1997,53 @@ export function registerGLTFLoader(THREE) {
 
                 // Load binary image data from bufferView, if provided.
 
-                sourceURI = parser.getDependency('bufferView', source.bufferView).then(function (bufferView) {
-
-                    isObjectURL = true;
-                    var blob = new Blob([bufferView], { type: source.mimeType });
-                    sourceURI = URL.createObjectURL(blob);
-                    return sourceURI;
-
+                sourceURI = await parser.getDependency('bufferView', source.bufferView).then(function (bufferView) {
+                    const arr =[];
+                    const bytes = new Uint8Array( bufferView );
+                    for (let i of bytes) {
+                        arr.push(String.fromCharCode(i));
+                    }
+                    return `data:${source.mimeType};base64,${btoa(arr.join(''))}`;
                 });
-
             }
 
-            return Promise.resolve(sourceURI).then(function (sourceURI) {
+            const sourceURI_1 = await Promise.resolve(sourceURI);
+            // Load Texture resource.
+            var loader = THREE.Loader.Handlers.get(sourceURI_1);
+            if (!loader) {
 
-                // Load Texture resource.
+                loader = textureExtensions[EXTENSIONS.MSFT_TEXTURE_DDS]
+                    ? parser.extensions[EXTENSIONS.MSFT_TEXTURE_DDS].ddsLoader
+                    : textureLoader;
 
-                var loader = THREE.Loader.Handlers.get(sourceURI);
+            }
+            const texture = await new Promise(function (resolve, reject) {
 
-                if (!loader) {
-
-                    loader = textureExtensions[EXTENSIONS.MSFT_TEXTURE_DDS]
-                        ? parser.extensions[EXTENSIONS.MSFT_TEXTURE_DDS].ddsLoader
-                        : textureLoader;
-
-                }
-
-                return new Promise(function (resolve, reject) {
-
-                    loader.load(resolveURL(sourceURI, options.path), resolve, undefined, reject);
-
-                });
-
-            }).then(function (texture) {
-
-                // Clean up resources and configure Texture.
-
-                if (isObjectURL === true) {
-
-                    URL.revokeObjectURL(sourceURI);
-
-                }
-
-                texture.flipY = false;
-
-                if (textureDef.name !== undefined) texture.name = textureDef.name;
-
-                // Ignore unknown mime types, like DDS files.
-                if (source.mimeType in MIME_TYPE_FORMATS) {
-
-                    texture.format = MIME_TYPE_FORMATS[source.mimeType];
-
-                }
-
-                var samplers = json.samplers || {};
-                var sampler = samplers[textureDef.sampler] || {};
-
-                texture.magFilter = WEBGL_FILTERS[sampler.magFilter] || THREE.LinearFilter;
-                texture.minFilter = WEBGL_FILTERS[sampler.minFilter] || THREE.LinearMipmapLinearFilter;
-                texture.wrapS = WEBGL_WRAPPINGS[sampler.wrapS] || THREE.RepeatWrapping;
-                texture.wrapT = WEBGL_WRAPPINGS[sampler.wrapT] || THREE.RepeatWrapping;
-
-                return texture;
+                loader.load(resolveURL(sourceURI_1, options.path), resolve, undefined, reject);
 
             });
+            // Clean up resources and configure Texture.
+            if (isObjectURL === true) {
+
+                URL.revokeObjectURL(sourceURI);
+
+            }
+            texture.flipY = false;
+            if (textureDef.name !== undefined)
+                texture.name = textureDef.name;
+            // Ignore unknown mime types, like DDS files.
+            if (source.mimeType in MIME_TYPE_FORMATS) {
+
+                texture.format = MIME_TYPE_FORMATS[source.mimeType];
+
+            }
+            var samplers = json.samplers || {};
+            var sampler = samplers[textureDef.sampler] || {};
+            texture.magFilter = WEBGL_FILTERS[sampler.magFilter] || THREE.LinearFilter;
+            texture.minFilter = WEBGL_FILTERS[sampler.minFilter] || THREE.LinearMipmapLinearFilter;
+            texture.wrapS = WEBGL_WRAPPINGS[sampler.wrapS] || THREE.RepeatWrapping;
+            texture.wrapT = WEBGL_WRAPPINGS[sampler.wrapT] || THREE.RepeatWrapping;
+            return texture;
 
         };
 
