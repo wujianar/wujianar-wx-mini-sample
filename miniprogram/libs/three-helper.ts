@@ -166,7 +166,7 @@ export default class ThreeHelper {
      */
     public loadVideo(cfg: VideoConfig) {
         this.videoRate = cfg.height / cfg.width;
-        this.frameSize.height = cfg.height * (this.frameSize.width / cfg.width);
+        this.frameSize.height = Math.floor(cfg.height * (this.frameSize.width / cfg.width));
 
         if (!this.offscreenCanvas) {
             this.offscreenCanvas = wx.createOffscreenCanvas({ type: '2d', width: cfg.width, height: cfg.height });
@@ -260,7 +260,6 @@ export default class ThreeHelper {
         }
         // this.scene.dispose();
         if (this.scene) {
-            this.scene.clear();
             // @ts-ignore
             this.scene = null;
         }

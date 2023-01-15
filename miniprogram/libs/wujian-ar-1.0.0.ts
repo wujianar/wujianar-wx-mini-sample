@@ -90,7 +90,7 @@ export default class WuJianAR {
         }
 
         this.searchFrom = WuJianAR.SEARCH_FROM_TRACKER;
-        this.threeHelper!.setAnchorStatus(false);
+        this.threeHelper?.setAnchorStatus(false);
 
         this.width = canvas.width;
         this.height = canvas.height;
@@ -307,7 +307,7 @@ export default class WuJianAR {
      * 停止跟踪
      */
     public stopTracking() {
-        this.session!.stop();
+        this.session?.stop();
         this.removeMarker();
     }
 
@@ -559,7 +559,7 @@ export default class WuJianAR {
 
     public reset() {
         this.removeMarker();
-        this!.threeHelper.reset();
+        this.threeHelper?.reset();
     }
 
     public dispose() {

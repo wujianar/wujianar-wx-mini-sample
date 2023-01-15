@@ -28,11 +28,6 @@ Page({
             height: sys.windowHeight,
         });
 
-        if (!webAR.isSupportTracker()) {
-            wx.showModal({ title: '你的微信不支持跟踪功能', showCancel: false });
-            return;
-        }
-
         // 识别请求成功后的回调
         webAR.on(WebAR.EVENT_SEARCH, (msg: SearchResponse) => {
             console.info(msg);
@@ -56,11 +51,18 @@ Page({
                 wx.showToast({ icon: 'error', title: err.message });
             });
         });
+    },
+    onReady() {
+        if (!webAR.isSupportTracker()) {
+            wx.showModal({ title: '你的微信不支持跟踪功能', showCancel: false });
+            return;
+        }
 
         // threejs使用的webgl canvas
         this.queryCanvas('#three').then((target: any) => {
             threeHelper.setCanvas(target);
         }).catch(err => {
+            console.error(err);
             wx.showToast({ title: '未找到模型渲染的canvas', icon: 'error' });
             return;
         });
@@ -101,7 +103,7 @@ Page({
                 threeHelper.setAnchorStatus(true);
 
                 // @ts-ignore
-                this.video!.play();
+                this.video?.play();
             });
             // 跟踪丢失
             webAR.on(WebAR.EVENT_LOST, (anchor) => {
@@ -109,7 +111,7 @@ Page({
                 threeHelper.setAnchorStatus(false);
 
                 // @ts-ignore
-                this.video.pause();
+                this.video?.pause();
             });
         }).catch(err => {
             console.error(err);
@@ -125,7 +127,7 @@ Page({
         this.startSearch();
 
         // @ts-ignore
-        this.video!.stop();
+        this.video?.stop();
         this.video = null;
     },
 

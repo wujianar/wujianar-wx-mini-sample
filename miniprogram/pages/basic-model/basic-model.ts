@@ -26,7 +26,6 @@ Page({
             width: sys.windowWidth,
             height: sys.windowHeight
         });
-
         // 识别请求成功后的回调
         wuJianAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
             console.info(msg);
@@ -51,7 +50,8 @@ Page({
         threeHelper.on(ThreeHelper.EVENT_TICK, (delta: number) => {
             // console.info(delta);
         });
-
+    },
+    onReady() {
         // 将webgl canvas传给threejs
         this.queryCanvas('#webgl').then((target: any) => {
             threeHelper.setCanvas(target);
