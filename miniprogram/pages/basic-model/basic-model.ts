@@ -1,5 +1,5 @@
 import ThreeHelper from "../../libs/three-helper";
-import WuJianAR from "../../libs/wujian-ar-1.0.0";
+import WuJianAR from "../../libs/wujian-ar-1.0.1";
 
 /**
  * 
@@ -60,9 +60,9 @@ Page({
             wx.showToast({ title: '未找到模型渲染的canvas', icon: 'error' });
         });
     },
-    onUnload() {
-        wuJianAR.dispose();
+    onUnload() {        
         this.stopSearch();
+        wuJianAR.dispose();
     },
     // 相机初始化完成，开启识别
     cameraDone(e: any) {

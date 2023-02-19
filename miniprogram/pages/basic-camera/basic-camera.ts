@@ -1,4 +1,4 @@
-import WuJinaAR from "../../libs/wujian-ar-1.0.0";
+import WuJinaAR from "../../libs/wujian-ar-1.0.1";
 
 /**
  * 
@@ -35,9 +35,9 @@ Page({
             }
         });
     },
-    onUnload() {
-        wuJinaAR.dispose();
+    onUnload() {       
         this.stopSearch();
+        wuJinaAR.dispose();
     },
     // 相机初始化完成，开启识别
     cameraDone(e: any) {
@@ -53,6 +53,11 @@ Page({
     },
     // 开始识别
     startSearch() {
+        if (!this.isCameraInitDone) {
+            wx.showToast({ title: '相机未打开', icon: 'none' });
+            return;
+        }
+
         wuJinaAR.startSearch();
         this.setData({
             isSearching: true,

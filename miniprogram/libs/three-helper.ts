@@ -12,6 +12,7 @@ export default class ThreeHelper {
     private anchor!: THREE.Object3D;
     private texture!: THREE.Texture;
     private plane!: THREE.Mesh;
+    private renderRequestID: number = 0;
     private canvas!: WechatMiniprogram.Canvas;
 
     private videoRate: number = 0.5625;
@@ -59,7 +60,7 @@ export default class ThreeHelper {
     }
 
     private render() {
-        this.canvas.requestAnimationFrame(() => {
+        this.renderRequestID = this.canvas.requestAnimationFrame(() => {
             this.render();
         });
 
@@ -90,7 +91,9 @@ export default class ThreeHelper {
     }
 
     public setAnchorStatus(bl: boolean) {
-        this.anchor.visible = bl;
+        if (this.anchor) {
+            this.anchor.visible = bl;
+        }
     }
 
     /**
@@ -246,6 +249,12 @@ export default class ThreeHelper {
 
     public dispose() {
         this.reset();
+
+        if (this.canvas) {
+            this.canvas.cancelAnimationFrame(this.renderRequestID);
+            // @ts-ignore
+            this.canvas = null;
+        }
 
         if (this.camera) {
             // @ts-ignore

@@ -1,5 +1,5 @@
 import ThreeHelper from "../../libs/three-helper";
-import WebAR from "../../libs/wujian-ar-1.0.0";
+import WuJinaAR from "../../libs/wujian-ar-1.0.1";
 
 /**
  * 
@@ -10,9 +10,9 @@ import WebAR from "../../libs/wujian-ar-1.0.0";
  */
 
 // 初始化WebAR
-const webAR = new WebAR(getApp().globalData.config);
+const wuJinaAR = new WuJinaAR(getApp().globalData.config);
 const threeHelper = new ThreeHelper();
-webAR.setThreeHelper(threeHelper);
+wuJinaAR.setThreeHelper(threeHelper);
 
 Page({
     data: {
@@ -29,7 +29,7 @@ Page({
         });
 
         // 识别请求成功后的回调
-        webAR.on(WebAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJinaAR.on(WuJinaAR.EVENT_SEARCH, (msg: SearchResponse) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -44,7 +44,7 @@ Page({
 
             // 加载踪踪数据
             // 如：{code: 200, data: {name: "恐龙", uuid: "3ba85677176f49569364d958f5014fa1", brief: "{"modelUrl":"https://wujianar-cdn.oss-cn-hangzhou.aliyuncs.com/ardemo/models/kl.gltf","scale":0.07}"}, message: "succeed"}
-            webAR.loadTrackingTarget(msg.data).then(() => {
+            wuJinaAR.loadTrackingTarget(msg.data).then(() => {
                 wx.showToast({ title: '请将相机对着识别图' });
             }).catch((err: ErrorMessage) => {
                 console.info(err);
@@ -53,7 +53,7 @@ Page({
         });
     },
     onReady() {
-        if (!webAR.isSupportTracker()) {
+        if (!wuJinaAR.isSupportTracker()) {
             wx.showModal({ title: '你的微信不支持跟踪功能', showCancel: false });
             return;
         }
@@ -70,7 +70,7 @@ Page({
         // camera使用的webgl canvas
         this.queryCanvas('#camera').then((target: any) => {
             // 打开跟踪功能
-            webAR.openTracker(target);
+            wuJinaAR.openTracker(target);
             this.bindEvent();
 
             // 开启云识别
@@ -82,7 +82,7 @@ Page({
     },
     onUnload() {
         this.video = null;
-        webAR.dispose();
+        wuJinaAR.dispose();
     },
     bindEvent() {
         // threejs 帧更新事件
@@ -91,14 +91,14 @@ Page({
         });
 
         // 加载视频
-        webAR.on(WebAR.EVENT_VIDEO, (setting: VideoSetting) => {
+        wuJinaAR.on(WuJinaAR.EVENT_VIDEO, (setting: VideoSetting) => {
             this.setData({ videoUrl: setting.videoUrl });
         });
 
         // 开启跟踪功能后的事件回调
-        webAR.startTracking().then(() => {
+        wuJinaAR.startTracking().then(() => {
             // 识别到目标
-            webAR.on(WebAR.EVENT_FOUND, (anchor) => {
+            wuJinaAR.on(WuJinaAR.EVENT_FOUND, (anchor) => {
                 console.info('WebAR.EVENT_FOUND');
                 threeHelper.setAnchorStatus(true);
 
@@ -106,7 +106,7 @@ Page({
                 this.video?.play();
             });
             // 跟踪丢失
-            webAR.on(WebAR.EVENT_LOST, (anchor) => {
+            wuJinaAR.on(WuJinaAR.EVENT_LOST, (anchor) => {
                 console.info('WebAR.EVENT_LOST');
                 threeHelper.setAnchorStatus(false);
 
@@ -119,7 +119,7 @@ Page({
     },
     // 关闭踪踪
     closeTracking() {
-        webAR.reset();
+        wuJinaAR.reset();
         this.setData({
             isSearching: true,
             videoUrl: '',
@@ -133,7 +133,7 @@ Page({
 
     // 开始识别
     startSearch() {
-        webAR.startSearch();
+        wuJinaAR.startSearch();
         this.setData({
             isSearching: true,
             isShowBtnClose: false,
@@ -141,7 +141,7 @@ Page({
     },
     // 停止识别
     stopSearch() {
-        webAR.stopSearch();
+        wuJinaAR.stopSearch();
         this.setData({
             isSearching: false,
             isShowBtnClose: true,
@@ -156,7 +156,7 @@ Page({
         const { width, height } = e.detail;
 
         this.queryContext('#video').then(video => {
-            webAR.setVideo({ video, width, height });
+            wuJinaAR.setVideo({ video, width, height });
             // video.play();
             this.video = video;
         }).catch(err => {

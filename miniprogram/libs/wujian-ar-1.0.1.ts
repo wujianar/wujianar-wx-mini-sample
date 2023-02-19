@@ -46,7 +46,7 @@ export default class WuJianAR {
     }
 
     public version(): string {
-        return '1.0.0';
+        return '1.0.1';
     }
 
     public on(name: string, func: (msg: any) => void) {
@@ -497,9 +497,10 @@ export default class WuJianAR {
     public setThreeHelper(t: ThreeHelper) {
         this.threeHelper = t;
         this.on(WuJianAR.EVENT_CAMERA, (camera) => {
-            this.threeHelper.updateCamera(camera);
+            if (this.threeHelper && camera) {
+                this.threeHelper.updateCamera(camera);
+            }
         });
-
     }
 
     /**
@@ -589,7 +590,7 @@ export default class WuJianAR {
         if (this.threeHelper) {
             this.threeHelper.dispose();
             // @ts-ignore
-            this.threeHelper = null;
+            // this.threeHelper = null;
         }
     }
 }

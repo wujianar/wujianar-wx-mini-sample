@@ -1,4 +1,4 @@
-import WuJianAR from "../../libs/wujian-ar-1.0.0";
+import WuJianAR from "../../libs/wujian-ar-1.0.1";
 
 /**
  * 
@@ -9,14 +9,14 @@ import WuJianAR from "../../libs/wujian-ar-1.0.0";
  */
 
 // 初始化WebAR
-const wujianAR = new WuJianAR(getApp().globalData.config);
+const wuJinaAR = new WuJianAR(getApp().globalData.config);
 
 Page({
     data: {
         height: 500,
         imgSrc: '',
     },
-    isSearching: false,
+    isCameraInitDone: false,
     onLoad() {
         const sys = wx.getSystemInfoSync();
         this.setData({
@@ -24,7 +24,7 @@ Page({
         });
 
         // 识别请求成功后的回调
-        wujianAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJinaAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -35,13 +35,23 @@ Page({
             }
         });
     },
+    onUnload() {
+    },
+    cameraDone(e: any) {
+        this.isCameraInitDone = true;
+    },
     onError(e: any) {
         console.info(e);
         wx.showToast({ icon: 'error', title: e.detail.errMsg });
     },
     takePhoto() {
+        if (!this.isCameraInitDone) {
+            wx.showToast({ title: '相机未打开', icon: 'none' });
+            return;
+        }
+
         wx.showLoading({ title: '识别中...' });
-        wujianAR.searchByTakePhoto().then((filename: string) => {
+        wuJinaAR.searchByTakePhoto().then((filename: string) => {
             this.setData({
                 imgSrc: filename
             });
