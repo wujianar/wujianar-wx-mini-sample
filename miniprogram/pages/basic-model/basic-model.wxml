@@ -1,7 +1,10 @@
 <view>
     <view class="demo-title">简单识别 - 渲染模型</view>
     <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" style="width: 100%; height: {{height}}px;"></camera>
-    <canvas class="webgl" type="webgl" id="webgl" style="width:100%;height:{{height}}px"></canvas>
+    <canvas class="webgl" type="webgl" id="webgl" style="width:100%;height:{{height}}px"
+        bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"
+    ></canvas>
 </view>
 <scanning wx:if="{{isSearching}}" class="scanning"></scanning>
 <view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="removeModel">X</view>
+<view class="gesture-tip">支持手势：单指旋转；双指缩放</view>

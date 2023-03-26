@@ -20,6 +20,7 @@ Page({
         isShowBtnClose: false,
     },
     isCameraInitDone: false,
+    canvas: null,
     onLoad() {
         const sys = wx.getSystemInfoSync();
         this.setData({
@@ -51,16 +52,22 @@ Page({
             // console.info(delta);
         });
     },
-    onReady() {
+    async onReady() {
         // 将webgl canvas传给threejs
-        this.queryCanvas('#webgl').then((target: any) => {
-            threeHelper.setCanvas(target);
-        }).catch((err: any) => {
+        try {
+            this.canvas = await this.queryCanvas('#webgl');
+        } catch (err) {
             console.info(err);
             wx.showToast({ title: '未找到模型渲染的canvas', icon: 'error' });
-        });
+            return;
+        }
+
+        // @ts-ignore
+        threeHelper.setCanvas(this.canvas);
+        // 手势事件
+        threeHelper.addOrbitControl();
     },
-    onUnload() {        
+    onUnload() {
         this.stopSearch();
         wuJianAR.dispose();
     },
@@ -128,5 +135,20 @@ Page({
                     return resolve(res.node);
                 }).exec();
         });
-    }
+    },
+
+    /* 手势事件 START */
+    touchStart(e: any) {
+        // @ts-ignore
+        this.canvas.dispatchTouchEvent(e,);
+    },
+    touchMove(e: any) {
+        // @ts-ignore
+        this.canvas.dispatchTouchEvent(e);
+    },
+    touchEnd(e: any) {
+        // @ts-ignore
+        this.canvas.dispatchTouchEvent(e);
+    },
+    /* 手势事件 END */
 });

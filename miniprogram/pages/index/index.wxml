@@ -1,5 +1,5 @@
 <view class="container">
-    <view class="title">无间WebAR 微信小程序Sample</view>
+    <view class="title">Sample</view>
     <scroll-view class="nav-list" scroll-y="{{true}}">
         <mp-cells title="基本应用">
             <mp-cell value="简单识别 拍照方式" url="../basic-take-photo/basic-take-photo" link="{{true}}"></mp-cell>

@@ -1,5 +1,6 @@
 import { createScopedThreejs } from "./three";
 import { registerGLTFLoader } from "./gltf-loader";
+import { registerOrbitControl } from "./orbit-controls";
 
 export default class ThreeHelper {
     // @ts-ignore
@@ -36,6 +37,7 @@ export default class ThreeHelper {
         this.canvas = canvas;
         this.THREE = createScopedThreejs(canvas);
         registerGLTFLoader(this.THREE);
+        registerOrbitControl(this.THREE);
 
         this.scene = new this.THREE.Scene();
         this.scene.add(new this.THREE.AmbientLight(0xFFFFFF, 2));
@@ -74,6 +76,13 @@ export default class ThreeHelper {
         }
 
         this.emit(ThreeHelper.EVENT_TICK, this.clock.getDelta());
+    }
+
+    public addOrbitControl() {
+        this.camera.matrixAutoUpdate = true;
+        const {OrbitControls} = registerOrbitControl(this.THREE)
+        const control = new OrbitControls( this.camera, this.renderer.domElement );
+        control.update();
     }
 
     public on(name: string, func: (delta: number) => void) {
@@ -139,8 +148,8 @@ export default class ThreeHelper {
                     model.mixer.clipAction(object.animations[0]).play();
                 }
 
-                this.emit(ThreeHelper.EVENT_MODEL, model);
-                resolve(true);
+                // this.emit(ThreeHelper.EVENT_MODEL, model);
+                resolve(model);
             }, () => {
             }, (err: any) => {
                 reject(err);
@@ -187,12 +196,19 @@ export default class ThreeHelper {
                 this.offscreenCtx.drawImage(cfg.video, 0, 0, cfg.width, cfg.height, 0, 0, this.frameSize.width, this.frameSize.height);
                 // @ts-ignore
                 const imgData = this.offscreenCtx.getImageData(0, 0, this.frameSize.width, this.frameSize.height);
-                const data = new Uint8Array(imgData.data);
                 if (!this.videoFrame) {
-                    this.videoFrame = new Uint8Array(data.length);
+                    this.videoFrame = new Uint8Array(imgData.data.length);
                     this.addPlane();
                 }
-                this.videoFrame.set(data);
+                // this.videoFrame.set(new Uint8Array(imgData.data));
+                this.videoFrame.set(imgData.data);
+
+                // const data = new Uint8Array(imgData.data);
+                // if (!this.videoFrame) {
+                //     this.videoFrame = new Uint8Array(data.length);
+                //     this.addPlane();
+                // }
+                // this.videoFrame.set(data);
             } catch (err) {
                 console.error(err);
             }

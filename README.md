@@ -11,9 +11,13 @@
 
 # sample说明
 
-下载地址： https://github.com/wujianar/wujianar-wx-mini-sample
+下载地址：
 
-sample可直接运行，无需修改。
+https://github.com/wujianar/wujianar-wx-mini-samples
+
+https://gitee.com/wujianar/wujianar-wx-mini-sample
+
+sample可直接运行，无需修改，识别图在images目录。
 
 # 开发说明
 
@@ -37,11 +41,15 @@ sample中用到的识别图及关联信息如下：
 
 ![video-marker](images/video.jpg)
 
+播放视频
+
 ```json
 {"videoUrl":"https://wujianar-cdn.oss-cn-hangzhou.aliyuncs.com/ardemo/videos/2.mp4"}
 ```
 
 ![model-marker](images/model.jpg)
+
+渲染3D模型
 
 ```json
 {"modelUrl":"https://wujianar-cdn.oss-cn-hangzhou.aliyuncs.com/ardemo/models/kl.gltf","scale":0.07}
@@ -89,4 +97,10 @@ sample中用到的识别图及关联信息如下：
 
 ## 2, 域名不在合法域名列表中
 
-wujianar.com是未备案域名，不能加入到合法域名列表中，请使用你的域名代理到iss-cn2.wujianar.com，或请与技术支持联系。
+开发过程中可以勾选不检验合法域名，操作过程如下：点击右上角“详情”，选择“本地设置”，勾选“不校验合法域名、web-view（业务域名）、TLS版本以及HTTPS证书”。
+
+![sample](images/dev.png)
+
+**生产环境中请将域名 iss-api.wujianar.cn 加入request合法域名中。**
+
+![domain](images/domain.png)

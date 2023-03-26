@@ -448,16 +448,20 @@ export default class WuJianAR {
      * @returns 
      */
     public searchByTakePhoto(): Promise<string> {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {            
             wx.createCameraContext().takePhoto({
                 quality: 'normal',
                 success: (res: any) => {
+                    wx.showToast({title: 'success'});
                     this.searchByFile(res.tempImagePath).then(msg => {
                         this.emit(WuJianAR.EVENT_SEARCH, msg);
                     });
                     resolve(res.tempImagePath);
                 },
-                fail: err => reject(err)
+                fail: err => {
+                    wx.showToast({title: 'error'});
+                    reject(err);
+                }
             });
         });
     }
@@ -468,9 +472,17 @@ export default class WuJianAR {
      * @returns 
      */
     public searchByFile(filename: string): Promise<SearchResponse> {
-        const form = new FormData();
-        form.appendFile('file', filename);
-        const data = form.getData();
+        wx.showToast({title: 'sending'});
+        let data: any = null;
+
+        try {
+            const form = new FormData();
+            form.appendFile('file', filename);
+            data = form.getData();
+        } catch (e) {
+            wx.showToast({title: 'error'});
+        }
+
 
         return this.request({
             url: '',
