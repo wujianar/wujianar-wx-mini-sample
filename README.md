@@ -13,9 +13,9 @@
 
 下载地址：
 
-https://github.com/wujianar/wujianar-wx-mini-samples
+https://github.com/wujianar/wujianar-wx-mini-sample
 
-https://gitee.com/wujianar/wujianar-wx-mini-samples
+https://gitee.com/wujianar/wujianar-wx-mini-sample
 
 sample可直接运行，无需修改，识别图在images目录。
 
