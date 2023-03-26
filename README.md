@@ -15,7 +15,7 @@
 
 https://github.com/wujianar/wujianar-wx-mini-samples
 
-https://gitee.com/wujianar/wujianar-wx-mini-sample
+https://gitee.com/wujianar/wujianar-wx-mini-samples
 
 sample可直接运行，无需修改，识别图在images目录。
 
