@@ -1,4 +1,4 @@
-import WuJianAR from "../../libs/wujian-ar-1.0.1";
+import WuJianAR from "../../libs/wujian-ar-1.0.2";
 
 /**
  * 

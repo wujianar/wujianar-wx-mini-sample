@@ -12,15 +12,13 @@ export default class ThreeHelper {
     private mixers: any[] = [];
     private anchor!: THREE.Object3D;
     private texture!: THREE.Texture;
-    private plane!: THREE.Mesh;
     private renderRequestID: number = 0;
     private canvas!: WechatMiniprogram.Canvas;
 
-    private videoRate: number = 0.5625;
-    private frameSize: TargetSize = { width: 512, height: 1080 * (512 / 1920) };
-    private videoFrame!: Uint8Array;
-    private offscreenCanvas!: WechatMiniprogram.OffscreenCanvas;
-    private offscreenCtx!: WechatMiniprogram.RenderingContext;
+    private frameWidth: number = 512;
+    private videoRenderId: number = -1;
+    private interval: number = 30;
+    private files: string[] = [];
 
     private events: Map<String, (data: any) => void> = new Map();
     public static EVENT_TICK: string = 'tick';
@@ -66,6 +64,7 @@ export default class ThreeHelper {
             this.render();
         });
 
+        this.renderer.autoClearColor = true;
         this.renderer.render(this.scene, this.camera);
         for (const mixer of this.mixers) {
             mixer.update(this.clock.getDelta());
@@ -80,8 +79,8 @@ export default class ThreeHelper {
 
     public addOrbitControl() {
         this.camera.matrixAutoUpdate = true;
-        const {OrbitControls} = registerOrbitControl(this.THREE)
-        const control = new OrbitControls( this.camera, this.renderer.domElement );
+        const { OrbitControls } = registerOrbitControl(this.THREE);
+        const control = new OrbitControls(this.camera, this.renderer.domElement);
         control.update();
     }
 
@@ -159,7 +158,7 @@ export default class ThreeHelper {
 
     private disposeModel() {
         try {
-            const model = this.scene.getObjectByName('player');
+            const model = this.scene?.getObjectByName('player');
             if (model) {
                 this.anchor.remove(model);
                 if (this.mixers.length > 0) {
@@ -177,87 +176,78 @@ export default class ThreeHelper {
      * @returns 
      */
     public loadVideo(cfg: VideoConfig) {
-        this.videoRate = cfg.height / cfg.width;
-        this.frameSize.height = Math.floor(cfg.height * (this.frameSize.width / cfg.width));
+        cfg.canvas.width = this.frameWidth;
+        cfg.canvas.height = Math.floor(cfg.height * (this.frameWidth / cfg.width));
 
-        if (!this.offscreenCanvas) {
-            this.offscreenCanvas = wx.createOffscreenCanvas({ type: '2d', width: cfg.width, height: cfg.height });
-            this.offscreenCtx = this.offscreenCanvas.getContext('2d');
-        }
+        const platform = wx.getSystemInfoSync().platform;
+        this.texture = platform == 'ios' ? new this.THREE.Texture() : new this.THREE.CanvasTexture(cfg.canvas);
+        this.texture.minFilter = this.THREE.LinearFilter;
+        this.texture.wrapS = this.THREE.ClampToEdgeWrapping;
+        this.texture.wrapT = this.THREE.ClampToEdgeWrapping;
 
-        const render = () => {
-            // @ts-ignore
-            this.offscreenCanvas.requestAnimationFrame(() => {
-                render();
-            });
+        const material = new this.THREE.MeshBasicMaterial({ side: this.THREE.FrontSide, map: this.texture });
+        const plane = new this.THREE.Mesh(new this.THREE.PlaneGeometry(1, cfg.height / cfg.width), material);
+        plane.rotation.x = -Math.PI / 2;
+        plane.name = 'player';
+        this.anchor.add(plane);
 
+        const ctx = cfg.canvas.getContext('2d');
+        const renderVideo = () => {
             try {
                 // @ts-ignore
-                this.offscreenCtx.drawImage(cfg.video, 0, 0, cfg.width, cfg.height, 0, 0, this.frameSize.width, this.frameSize.height);
-                // @ts-ignore
-                const imgData = this.offscreenCtx.getImageData(0, 0, this.frameSize.width, this.frameSize.height);
-                if (!this.videoFrame) {
-                    this.videoFrame = new Uint8Array(imgData.data.length);
-                    this.addPlane();
-                }
-                // this.videoFrame.set(new Uint8Array(imgData.data));
-                this.videoFrame.set(imgData.data);
+                ctx.drawImage(cfg.video, 0, 0, cfg.width, cfg.height, 0, 0, cfg.canvas.width, cfg.canvas.height);
 
-                // const data = new Uint8Array(imgData.data);
-                // if (!this.videoFrame) {
-                //     this.videoFrame = new Uint8Array(data.length);
-                //     this.addPlane();
-                // }
-                // this.videoFrame.set(data);
+                if (platform == 'ios') {
+                    this.loadVideoIOS(cfg);
+                }
             } catch (err) {
                 console.error(err);
             }
+
+            this.videoRenderId = setTimeout(() => {
+                renderVideo();
+            }, this.interval);
         };
 
-        render();
+        renderVideo();
     }
 
+    private loadVideoIOS(cfg: VideoConfig) {
+        const filePath = `${wx.env.USER_DATA_PATH}/marker-${Math.random().toString(16).substring(2)}.jpg`;
+        const imgData = cfg.canvas.toDataURL('image/jpg', 0.7).split('base64,').pop() || '';
+
+        const fs = wx.getFileSystemManager();
+        const fd = fs.openSync({ filePath, flag: 'w' });
+        fs.writeFileSync(filePath, imgData, 'base64');
+        fs.closeSync({ fd });
+        this.files.push(filePath);
+
+        (new this.THREE.ImageLoader()).load(filePath, (img: any) => {
+            try {
+                if (this.texture) {
+                    this.texture.image = img;
+                    this.texture.needsUpdate = true;
+                }
+
+                if (this.files.length > 3) {
+                    fs.unlinkSync(this.files.shift() || '');
+                }
+            } catch (e) {
+                console.warn(e);
+            }
+        });
+    }
     private disposeVideo() {
         try {
             this.disposeModel();
 
-            if (this.offscreenCanvas) {
-                // @ts-ignore
-                this.offscreenCtx = null;
-                // @ts-ignore
-                this.offscreenCanvas = null;
-            }
+            clearTimeout(this.videoRenderId);
 
             if (this.texture) {
                 this.texture.dispose();
                 // @ts-ignore
                 this.texture = null;
             }
-            // @ts-ignore
-            this.plane = null;
-            // @ts-ignore
-            this.videoFrame = null;
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    private addPlane() {
-        try {
-            this.texture = new this.THREE.DataTexture(this.videoFrame, this.frameSize.width, this.frameSize.height);
-            this.texture.minFilter = this.THREE.LinearFilter;
-            this.texture.wrapS = this.THREE.ClampToEdgeWrapping;
-            this.texture.wrapT = this.THREE.ClampToEdgeWrapping;
-
-            const geometry = new this.THREE.PlaneGeometry(1, this.videoRate);
-            const material = new this.THREE.MeshBasicMaterial({ side: this.THREE.BackSide, map: this.texture });
-            this.plane = new this.THREE.Mesh(geometry, material);
-
-            this.plane.rotation.x = Math.PI / 2;
-            this.plane.name = 'player';
-            this.anchor.add(this.plane);
-
-            this.emit(ThreeHelper.EVENT_MODEL, this.plane);
         } catch (err) {
             console.error(err);
         }

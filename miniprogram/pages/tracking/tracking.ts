@@ -1,5 +1,5 @@
 import ThreeHelper from "../../libs/three-helper";
-import WuJinaAR from "../../libs/wujian-ar-1.0.1";
+import WuJinaAR from "../../libs/wujian-ar-1.0.2";
 
 /**
  * 
@@ -155,13 +155,10 @@ Page({
 
         const { width, height } = e.detail;
 
-        this.queryContext('#video').then(video => {
-            wuJinaAR.setVideo({ video, width, height });
-            // video.play();
-            this.video = video;
-        }).catch(err => {
-            console.error(err);
-        });
+        const video = await this.queryContext('#video');
+        this.video = video;
+        const canvas = await this.queryCanvas('#videoCanvas');
+        wuJinaAR.setVideo({ video, width, height, canvas });
     },
     videoError(e: any) {
         console.error(e);
