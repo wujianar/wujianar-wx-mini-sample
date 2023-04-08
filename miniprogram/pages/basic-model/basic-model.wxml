@@ -5,6 +5,6 @@
         bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"
     ></canvas>
 </view>
-<scanning wx:if="{{isSearching}}" class="scanning"></scanning>
+<scanning wx:if="{{isSearching}}"></scanning>
 <view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="removeModel">X</view>
 <view class="gesture-tip">支持手势：单指旋转；双指缩放</view>

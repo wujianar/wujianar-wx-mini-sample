@@ -1,9 +1,9 @@
 <view>
     <view class="demo-title">简单识别 - Camera</view>
     <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" style="width: 100%; height: {{height}}px;"></camera>
-    <view class="btn-group">
-        <button type="primary" class="btn2" bindtap="startSearch">开始识别</button>
-        <button type="primary" class="btn2" bindtap="stopSearch">停止识别</button>
-    </view>
 </view>
-<scanning wx:if="{{isSearching}}" class="scanning"></scanning>
+<scanning wx:if="{{isSearching}}"></scanning>
+<view class="btn-group">
+    <button type="primary" class="btn2" bindtap="startSearch">开始识别</button>
+    <button type="primary" class="btn2" bindtap="stopSearch">停止识别</button>
+</view>

@@ -7,5 +7,5 @@
         <canvas type="2d" id="videoCanvas"></canvas>
     </view>
 </view>
-<scanning wx:if="{{isSearching}}" class="scanning"></scanning>
+<scanning wx:if="{{isSearching}}"></scanning>
 <view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="closeTracking">X</view>

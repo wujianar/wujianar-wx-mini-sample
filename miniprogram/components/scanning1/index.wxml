@@ -1,0 +1,6 @@
+<view class="wrapper">
+    <view class="box">
+        <view class="line"></view>
+        <view class="angle"></view>
+    </view>
+</view>

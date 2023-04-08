@@ -12,3 +12,5 @@
         </mp-cells>
     </scroll-view>
 </view>
+
+<scanning1></scanning1>
