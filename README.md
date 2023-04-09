@@ -84,9 +84,13 @@ sample中用到的识别图及关联信息如下：
 
 注：开发工具上不能体验，请使用真机
 
-![sample](images/sample.png)
+![sample](images/sample.jpg)
 
+# 案例展示
 
+## 1. AR相册/海报/教育/读故事
+
+AR相册、海报、教育、读故事等场景使用技术类似，均是识别成功后播放视频，识别图片在目录images/album/中。
 
 # 常见问题
 

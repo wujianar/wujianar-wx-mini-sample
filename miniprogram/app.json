@@ -5,7 +5,9 @@
         "pages/basic-model/basic-model",
         "pages/basic-camera/basic-camera",
         "pages/basic-take-photo/basic-take-photo",
-        "pages/tracking/tracking"
+        "pages/tracking/tracking",
+        "pages/demo-album/welcome/index",
+        "pages/demo-album/album/index"
     ],
     "window": {
         "backgroundTextStyle": "light",

@@ -1,0 +1,9 @@
+{
+    "usingComponents": {
+        "scanning": "../../../components/scanning1/index"
+    },
+    "window": {
+        "disableScroll": true
+    },
+    "navigationBarTitleText": "AR相册 唤醒回忆"
+}

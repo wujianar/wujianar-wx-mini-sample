@@ -1,5 +1,5 @@
 <view class="container">
-    <view class="title">Sample</view>
+    <view class="title">无间WebAR 微信小程序Sample</view>
     <scroll-view class="nav-list" scroll-y="{{true}}">
         <mp-cells title="基本应用">
             <mp-cell value="简单识别 拍照方式" url="../basic-take-photo/basic-take-photo" link="{{true}}"></mp-cell>
@@ -10,7 +10,9 @@
         <mp-cells title="跟踪功能">
             <mp-cell value="播放视频 渲染3D模型" url="../tracking/tracking" link="{{true}}"></mp-cell>
         </mp-cells>
+        <mp-cells title="案例展示">
+            <mp-cell value="AR相册/海报/教育/读故事" url="../demo-album/welcome/index" link="{{true}}"></mp-cell>
+        </mp-cells>
     </scroll-view>
 </view>
-
 <scanning1></scanning1>

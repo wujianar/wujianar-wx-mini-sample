@@ -1,0 +1,6 @@
+<view class="welcome">
+    <image class="cover" src="./album-cover.jpg" mode="scaleToFill" bindtap="toAlbum"></image>
+    <view class="btns">
+        <image class="btn-start" src="./memory.png" bindtap="toAlbum"></image>
+    </view>
+</view>
