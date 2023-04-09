@@ -356,19 +356,12 @@ export default class WuJianAR {
      * 开始识别
      */
     public startSearch() {
-        if (this.useSearch) {
-            return;
-        }
-
-        if (this.searchFrom !== WuJianAR.SEARCH_FROM_TRACKER) {
-            if (!this.listener) {
-                this.startListener();
-            }
-            this.listener?.start();
-        }
-
         this.useSearch = true;
         this.isSearching = false;
+
+        if (this.searchFrom !== WuJianAR.SEARCH_FROM_TRACKER) {
+            this.startListener();
+        }        
     }
 
     /**
@@ -378,13 +371,16 @@ export default class WuJianAR {
         this.useSearch = false;
         this.isSearching = false;
 
-        if (this.searchFrom === WuJianAR.SEARCH_FROM_CAMERA) {
-            this.listener?.stop();
+        if (this.searchFrom !== WuJianAR.SEARCH_FROM_TRACKER) {
+            this.listener?.stop();           
         }
+         // @ts-ignore
+         this.listener = null;
     }
 
     private startListener() {
         if (this.listener) {
+            this.listener?.start();
             return;
         }
 
@@ -408,6 +404,7 @@ export default class WuJianAR {
                 console.error(err);
             });
         });
+        this.listener?.start();
     }
 
     private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
