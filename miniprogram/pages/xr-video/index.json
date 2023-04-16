@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "scanning": "../../components/scanning1/index",
+        "xr-video": "../../components/xr-video/index"
+    }
+}
