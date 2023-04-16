@@ -1,0 +1,4 @@
+<view class="demo-title">xr-frame - 渲染模型</view>
+<xr-model id="xr-model" useSearch="{{useSearch}}" width="{{width * ratio}}" height="{{height * ratio}}" style="width:{{width}}px;height:{{height}}px" bind:searchSuccess="onSearchSuccess" bind:arReady="onARReady"></xr-model>
+<scanning wx:if="{{isSearching}}"></scanning>
+<view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="removeModel">X</view>

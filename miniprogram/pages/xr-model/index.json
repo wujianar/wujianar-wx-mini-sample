@@ -1,0 +1,6 @@
+{
+    "usingComponents": {
+        "scanning": "../../components/scanning1/index",
+        "xr-model": "../../components/xr-model/index"
+    }
+}
