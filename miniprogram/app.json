@@ -1,6 +1,8 @@
 {
     "pages": [
         "pages/index/index",
+        "pages/xr-model/index",
+        "pages/xr-video/index",        
         "pages/basic-video/basic-video",
         "pages/basic-model/basic-model",
         "pages/basic-camera/basic-camera",
@@ -15,6 +17,7 @@
         "navigationBarTitleText": "无间WebAR 微信小程序Sample",
         "navigationBarTextStyle": "black"
     },
+    "lazyCodeLoading": "requiredComponents",
     "style": "v2",
     "sitemapLocation": "sitemap.json",
     "useExtendedLib": {

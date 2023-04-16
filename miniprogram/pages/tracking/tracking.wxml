@@ -1,5 +1,5 @@
 <view>
-    <view class="demo-title">跟踪功能</view>
+    <view class="demo-title">追踪功能</view>
     <canvas type="webgl" id="camera" class="camera" style="width: 100%; height: {{height}}px"></canvas>
     <canvas class="webgl" type="webgl" id="three" style="width:100%;height:{{height}}px"></canvas>
     <view class="offline-video" wx:if="{{videoUrl != ''}}">

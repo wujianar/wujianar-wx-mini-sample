@@ -23,7 +23,7 @@ Component({
     data: {
         isARReady: false,
         markerUrl: '',
-        videoId: '',
+        targetId: '',
         isSearching: false,
         lastSearchTime: 0,
     },
@@ -49,7 +49,7 @@ Component({
         },
         handleTrackerSwitch: function (e: any) {
             try {
-                const video = this.scene.assets.getAsset('video-texture', this.data.videoId);
+                const video = this.scene.assets.getAsset('video-texture', this.data.targetId);
                 // xr-frame问题：没有暂停
                 e.detail.value ? video?.play() : video?.stop();
             } catch (e) {
@@ -109,9 +109,10 @@ Component({
             try {
                 let asset = this.scene.assets.getAsset('video-texture', data.uuid);
                 if (!asset) {
+                    // xr-frame问题：随机加载失败
                     const v = await this.scene.assets.loadAsset({
                         type: 'video-texture', assetId: data.uuid, src: brief.videoUrl,
-                        // xr-frame问题：没有音频
+                        // xr-frame问题：没有audio，没有loop
                         options: { autoPlay: true, abortAudio: false, loop: true }
                     });
                     asset = v.value;
@@ -125,7 +126,6 @@ Component({
                 t.scale.setValue(1, 1, asset.height / asset.width);
 
                 this.setData({
-                    videoId: data.uuid,
                     markerUrl: data.image,
                 });
 
@@ -144,10 +144,10 @@ Component({
             }
         },
         removeVideo: function () {
-            const el = this.scene.getElementById(`video-${this.data.videoId}`);
+            const el = this.scene.getElementById(`video-${this.data.targetId}`);
             if (el) {
                 this.shadowRoot.removeChild(el);
-                this.scene?.assets?.releaseAsset('video-texture', this.data.videoId);
+                this.scene?.assets?.releaseAsset('video-texture', this.data.targetId);
             }
         },
     }

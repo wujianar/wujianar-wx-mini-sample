@@ -7,8 +7,12 @@
             <mp-cell value="播放视频" url="../basic-video/basic-video" link="{{true}}"></mp-cell>
             <mp-cell value="渲染3D模型" url="../basic-model/basic-model" link="{{true}}"></mp-cell>
         </mp-cells>
-        <mp-cells title="跟踪功能">
+        <mp-cells title="追踪功能">
             <mp-cell value="播放视频 渲染3D模型" url="../tracking/tracking" link="{{true}}"></mp-cell>
+        </mp-cells>
+        <mp-cells title="xr-frame 追踪功能">
+            <mp-cell value="播放视频" url="../xr-video/index" link="{{true}}"></mp-cell>
+            <mp-cell value="渲染3D模型" url="../xr-model/index" link="{{true}}"></mp-cell>
         </mp-cells>
         <mp-cells title="案例展示">
             <mp-cell value="AR相册/海报/教育/读故事" url="../demo-album/welcome/index" link="{{true}}"></mp-cell>

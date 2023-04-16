@@ -21,7 +21,7 @@ Page({
             if (!this.data.isARReady) {
                 wx.showModal({
                     title: 'AR系统未启动',
-                    content: '可能是你的相机未启动或手机不支持XR-FRAME',
+                    content: '你的相机未启动或手机不支持XR-FRAME',
                     showCancel: false,
                 });
             }
@@ -53,7 +53,7 @@ Page({
             isShowBtnClose: true,
         });
     },
-    closeVideo() {
+    removeVideo() {
         this.selectComponent('#xr-video').removeVideo();
         this.startSearch();
     },
