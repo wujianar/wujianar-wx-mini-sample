@@ -47,8 +47,9 @@ Page({
             wuJinaAR.loadTrackingTarget(msg.data).then(() => {
                 wx.showToast({ title: '请将相机对着识别图' });
             }).catch((err: ErrorMessage) => {
-                console.info(err);
-                wx.showToast({ icon: 'error', title: err.message });
+                // console.info(err);
+                wx.showModal({title: '提示', content: JSON.stringify(err), showCancel: false});                
+                // wx.showToast({ icon: 'error', title: err.message });
             });
         });
     },

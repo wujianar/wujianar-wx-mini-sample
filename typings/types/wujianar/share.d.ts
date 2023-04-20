@@ -46,6 +46,7 @@ interface VideoConfig {
     video: WechatMiniprogram.VideoContext;
     width: number;
     height: number;
+    canvas: WechatMiniprogram.Canvas
 }
 
 interface TargetSize {
