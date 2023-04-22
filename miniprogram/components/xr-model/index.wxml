@@ -1,6 +1,8 @@
 <xr-scene ar-system="modes:Marker" id="xr-scene" bind:ready="handleReady" bind:ar-ready="handleARReady" bind:tick="handleTick">
     <xr-node>
-        <xr-ar-tracker wx:if="{{markerUrl != ''}}" mode="Marker" src="{{markerUrl}}" id="arTracker" bind:ar-tracker-switch="handleTrackerSwitch"></xr-ar-tracker>
+        <xr-ar-tracker wx:if="{{markerUrl != ''}}" mode="Marker" src="{{markerUrl}}" id="arTracker" bind:ar-tracker-switch="handleTrackerSwitch">
+            <xr-gltf wx:if="{{assetId != ''}}" node-id="player" model="{{assetId}}" scale="{{scale}} {{scale}} {{scale}}" anim-autoplay />
+        </xr-ar-tracker>
         <xr-camera id="camera" node-id="camera" position="0.8 2.2 -5" clear-color="0.925 0.925 0.925 1" background="ar" is-ar-camera></xr-camera>
     </xr-node>
     <xr-shadow id="shadow-root"></xr-shadow>
