@@ -1,4 +1,7 @@
 <xr-scene ar-system="modes:Marker" id="xr-scene" bind:ready="handleReady" bind:ar-ready="handleARReady" bind:tick="handleTick">
+    <xr-assets bind:progress="handleAssetsProgress" bind:loaded="handleAssetsLoaded">
+        <xr-asset-load wx:if="{{assetId != ''}}" type="gltf" asset-id="{{assetId}}" src="{{modelUrl}}" />
+    </xr-assets>
     <xr-node>
         <xr-ar-tracker wx:if="{{markerUrl != ''}}" mode="Marker" src="{{markerUrl}}" id="arTracker" bind:ar-tracker-switch="handleTrackerSwitch">
             <xr-gltf wx:if="{{assetId != ''}}" node-id="player" model="{{assetId}}" scale="{{scale}} {{scale}} {{scale}}" anim-autoplay />
