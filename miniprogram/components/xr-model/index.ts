@@ -119,8 +119,7 @@ Component({
             console.info(e);
             wx.showLoading({ title: '模型加载中' });
         },
-        handleAssetsLoaded: function (e: any) {
-            console.info(e);
+        handleAssetsLoaded: function () {
             wx.hideLoading();
             wx.showToast({
                 icon: 'none',
