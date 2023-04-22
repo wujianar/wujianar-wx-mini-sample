@@ -23,7 +23,7 @@ Component({
     data: {
         isARReady: false,
         markerUrl: '',
-        targetId: '',
+        assetId: '',
         isSearching: false,
         lastSearchTime: 0,
     },
@@ -35,12 +35,12 @@ Component({
         }
     },
     methods: {
-        async handleReady(e: any) {
+        handleReady: function (e: any) {
+            // xr-frame场景实例
             this.scene = e.detail.value;
-            this.shadowRoot = this.scene.getElementById('shadow-root');
-            this.xrFrameSystem = wx.getXrFrameSystem();
         },
         handleARReady: function () {
+            // AR系统启动
             this.setData({ isARReady: true });
             this.triggerEvent('arReady', { value: true }, {});
         },
@@ -48,6 +48,12 @@ Component({
             this.search();
         },
         handleTrackerSwitch: function (e: any) {
+            // 是否追踪到目标
+            if (e.detail.value) {
+                console.info('found');
+            } else {
+                console.info('lost');
+            }
         },
         search: function () {
             if (!this.properties.useSearch || !this.data.isARReady || this.data.isSearching) {
@@ -60,6 +66,8 @@ Component({
             }
             this.data.lastSearchTime = ts;
 
+            // 获取场景内容，并发到云识别服务
+            // 如果是要获取相机内容，请查看xr-frame官方文档
             const base64 = this.scene.share.captureToDataURL({ type: 'type', quality: 0.7 });
             wuJianAR.search({ image: base64.split('base64,').pop() }).then(msg => {
                 console.info(msg);
@@ -97,49 +105,26 @@ Component({
                 return;
             }
 
-            wx.showToast({
-                icon: 'none',
-                title: '模型加载中...',
-                duration: 2000,
+            this.setData({
+                markerUrl: data.image,
+                assetId: data.uuid,
+                scale: brief.scale,
+                modelUrl: brief.modelUrl,
             });
-
-            try {
-                const asset = this.scene.assets.getAssetWithState('gltf', data.uuid);
-                if (asset.state == 0) {
-                    this.scene.assets.loadAsset({ type: 'gltf', assetId: data.uuid, src: brief.modelUrl });
-                }
-
-                const el = this.scene.createElement(this.xrFrameSystem.XRGLTF, { 'model': data.uuid, 'anim-autoplay': '' });
-                el.setId(`${data.uuid}`);
-                this.shadowRoot.addChild(el);
-
-                if (brief.scale) {
-                    const t = el.getComponent(this.xrFrameSystem.Transform);
-                    t.scale.setValue(brief.scale, brief.scale, brief.scale);
-                }
-
-                this.setData({
-                    markerUrl: data.image,
-                });
-
-                wx.showToast({
-                    icon: 'none',
-                    title: '请将相机对着识别图',
-                });
-            } catch (e) {
-                console.error(e);
-                wx.showModal({
-                    title: '提示',
-                    content: '模型加载失败',
-                    showCancel: false,
-                });
-            }
         },
         removeModel: function () {
-            const el = this.scene.getElementById(`${this.data.targetId}`);
-            if (el) {
-                this.shadowRoot.removeChild(el);
-            }
+            this.setData({ markerUrl: '', assetId: '' });
         },
-    }
+        handleAssetsProgress: function (e: any) {
+            console.info(e);
+            wx.showLoading({ title: '模型加载中' });
+        },
+        handleAssetsLoaded: function () {
+            wx.hideLoading();
+            wx.showToast({
+                icon: 'none',
+                title: '请将相机对着识别图',
+            });
+        }
+    },
 });
