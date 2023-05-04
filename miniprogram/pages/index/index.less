@@ -8,8 +8,38 @@
         margin-top: 16rpx;
     }
 
-    .nav-list {
-        margin-top: 16rpx;
+    .nav {
+        .nav-title {
+            font-size: 28rpx;
+            color: RGBA(0, 0, 0, 0.5);
+            padding: 18rpx 32rpx;
+            border-bottom: 1px solid #EFEFEF;
+        }
 
+        .nav-list {
+            .nav-item {                
+                display: flex;
+                padding: 24rpx 32rpx;
+                border-bottom: 1px solid #EFEFEF;
+                color: RGBA(0, 0, 0, 0.9);
+                align-items: center;
+
+                .nav-text {
+                    flex: 1;
+                }
+
+                .nav-icon {
+                    font-size: 32rpx;
+                    width: 30rpx;
+                    height: 30rpx;
+                    color: RGBA(0, 0, 0, 0.4);
+                    font-weight: bold;
+                }
+                
+                .nav-icon::after {
+                    content: '〉';
+                }
+            }
+        }
     }
 }

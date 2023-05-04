@@ -1,22 +1,55 @@
 <view class="container">
     <view class="title">无间WebAR 微信小程序Sample</view>
-    <scroll-view class="nav-list" scroll-y="{{true}}">
-        <mp-cells title="基本应用">
-            <mp-cell value="简单识别 拍照方式" url="../basic-take-photo/basic-take-photo" link="{{true}}"></mp-cell>
-            <mp-cell value="简单识别 camera帧数据" url="../basic-camera/basic-camera" footer="" link="{{true}}"></mp-cell>
-            <mp-cell value="播放视频" url="../basic-video/basic-video" link="{{true}}"></mp-cell>
-            <mp-cell value="渲染3D模型" url="../basic-model/basic-model" link="{{true}}"></mp-cell>
-        </mp-cells>
-        <mp-cells title="追踪功能">
-            <mp-cell value="播放视频 渲染3D模型" url="../tracking/tracking" link="{{true}}"></mp-cell>
-        </mp-cells>
-        <mp-cells title="xr-frame 追踪功能">
-            <mp-cell value="播放视频" url="../xr-video/index" link="{{true}}"></mp-cell>
-            <mp-cell value="渲染3D模型" url="../xr-model/index" link="{{true}}"></mp-cell>
-        </mp-cells>
-        <mp-cells title="案例展示">
-            <mp-cell value="AR相册/海报/教育/读故事" url="../demo-album/welcome/index" link="{{true}}"></mp-cell>
-        </mp-cells>
-    </scroll-view>
+    <view class="nav">
+        <view class="nav-title">基本应用</view>
+        <view class="nav-list">
+            <navigator class="nav-item" url="../basic-take-photo/basic-take-photo">
+                <text class="nav-text">简单识别 拍照方式</text>
+                <text class="nav-icon"></text>
+            </navigator>
+            <navigator class="nav-item" url="../basic-camera/basic-camera">
+                <text class="nav-text">简单识别 camera帧数据</text>
+                <text class="nav-icon"></text>
+            </navigator>
+            <navigator class="nav-item" url="../basic-video/basic-video">
+                <text class="nav-text">播放视频</text>
+                <text class="nav-icon"></text>
+            </navigator>
+            <navigator class="nav-item" url="../basic-model/basic-model">
+                <text class="nav-text">渲染3D模型</text>
+                <text class="nav-icon"></text>
+            </navigator>
+        </view>
+    </view>
+    <view class="nav">
+        <view class="nav-title">追踪功能</view>
+        <view class="nav-list">
+            <navigator class="nav-item" url="../tracking/tracking">
+                <text class="nav-text">播放视频 渲染3D模型</text>
+                <text class="nav-icon"></text>
+            </navigator>
+        </view>
+    </view>
+    <view class="nav">
+        <view class="nav-title">xr-frame 追踪功能</view>
+        <view class="nav-list">
+            <navigator class="nav-item" url="../xr-video/index">
+                <text class="nav-text">播放视频</text>
+                <text class="nav-icon"></text>
+            </navigator>
+            <navigator class="nav-item" url="../xr-model/index">
+                <text class="nav-text">渲染3D模型</text>
+                <text class="nav-icon"></text>
+            </navigator>
+        </view>
+    </view>
+    <view class="nav">
+        <view class="nav-title">案例展示</view>
+        <view class="nav-list">
+            <navigator class="nav-item" url="../demo-album/welcome/index">
+                <text class="nav-text">AR相册/海报/教育/读故事</text>
+                <text class="nav-icon"></text>
+            </navigator>
+        </view>
+    </view>
 </view>
-<scanning1></scanning1>
