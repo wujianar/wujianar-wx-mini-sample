@@ -1,6 +1,12 @@
 <xr-scene ar-system="modes:Marker" id="xr-scene" bind:ready="handleReady" bind:ar-ready="handleARReady" bind:tick="handleTick">
+    <xr-assets bind:progress="handleAssetsProgress" bind:loaded="handleAssetsLoaded">
+        <xr-asset-load wx:if="{{assetId != ''}}" type="video-texture" asset-id="{{assetId}}" options="loop:true,autoPlay:false,abortAudio:false" src="{{videoUrl}}" />
+        <xr-asset-material wx:if="{{assetId != ''}}" asset-id="mat" effect="simple" uniforms="u_baseColorMap: video-{{assetId}}" />
+    </xr-assets>
     <xr-node>
-        <xr-ar-tracker wx:if="{{markerUrl != ''}}" mode="Marker" src="{{markerUrl}}" id="arTracker" bind:ar-tracker-switch="handleTrackerSwitch"></xr-ar-tracker>
+        <xr-ar-tracker wx:if="{{isLoaded}}" mode="Marker" src="{{markerUrl}}" id="arTracker" bind:ar-tracker-switch="handleTrackerSwitch">
+            <xr-mesh wx:if="{{isLoaded}}" node-id="mesh-plane" geometry="plane" material="mat" scale="1 1 {{videoHeight}}" />
+        </xr-ar-tracker>
         <xr-camera id="camera" node-id="camera" position="0.8 2.2 -5" clear-color="0.925 0.925 0.925 1" background="ar" is-ar-camera></xr-camera>
     </xr-node>
     <xr-shadow id="shadow-root"></xr-shadow>

@@ -23,7 +23,9 @@ Component({
     data: {
         isARReady: false,
         markerUrl: '',
-        targetId: '',
+        assetId: '',
+        videoHeight: 1,
+        isLoaded: false,
         isSearching: false,
         lastSearchTime: 0,
     },
@@ -37,8 +39,6 @@ Component({
     methods: {
         async handleReady(e: any) {
             this.scene = e.detail.value;
-            this.shadowRoot = this.scene.getElementById('shadow-root');
-            this.xrFrameSystem = wx.getXrFrameSystem();
         },
         handleARReady: function () {
             this.setData({ isARReady: true });
@@ -49,9 +49,9 @@ Component({
         },
         handleTrackerSwitch: function (e: any) {
             try {
-                const video = this.scene.assets.getAsset('video-texture', this.data.targetId);
-                // xr-frame问题：没有暂停
-                e.detail.value ? video?.play() : video?.stop();
+                const video = this.scene.assets.getAsset('video-texture', this.data.assetId);
+                // 在基础库`v2.33.0`及以上，提供了暂停/唤醒方法
+                e.detail.value ? video?.resume() : video?.pause();
             } catch (e) {
                 console.warn(e);
             }
@@ -100,55 +100,38 @@ Component({
                 return;
             }
 
-            wx.showToast({
-                icon: 'none',
-                title: '视频加载中...',
-                duration: 2000,
+            this.setData({
+                assetId: data.uuid,
+                markerUrl: data.image,
+                videoUrl: brief.videoUrl,
             });
-
-            try {
-                let asset = this.scene.assets.getAsset('video-texture', data.uuid);
-                if (!asset) {
-                    // xr-frame问题：随机加载失败
-                    const v = await this.scene.assets.loadAsset({
-                        type: 'video-texture', assetId: data.uuid, src: brief.videoUrl,
-                        // xr-frame问题：没有audio，没有loop
-                        options: { autoPlay: true, abortAudio: false, loop: true }
-                    });
-                    asset = v.value;
-                }
-
-                const el = this.scene.createElement(this.xrFrameSystem.XRMesh, { geometry: 'plane', uniforms: `u_baseColorMap:video-${data.uuid}` });
-                el.setId(`video-${data.uuid}`);
-                this.shadowRoot.addChild(el);
-
-                const t = el.getComponent(this.xrFrameSystem.Transform);
-                t.scale.setValue(1, 1, asset.height / asset.width);
-
-                this.setData({
-                    markerUrl: data.image,
-                });
-
-                wx.showToast({
-                    icon: 'none',
-                    title: '请将相机对着识别图',
-                });
-            } catch (e) {
-                // xr-frame问题：播放视频随机失败
-                console.error(e);
-                wx.showModal({
-                    title: '提示',
-                    content: '视频播放失败',
-                    showCancel: false,
-                });
-            }
+            wx.showLoading({ title: '视频加载中' });
         },
         removeVideo: function () {
-            const el = this.scene.getElementById(`video-${this.data.targetId}`);
-            if (el) {
-                this.shadowRoot.removeChild(el);
-                this.scene?.assets?.releaseAsset('video-texture', this.data.targetId);
-            }
+            this.setData({ markerUrl: '', assetId: '', isLoaded: false });
         },
+        handleAssetsProgress: function (e: any) {
+            console.info(e);
+        },
+        handleAssetsLoaded: function () {
+            wx.hideLoading();
+
+            const asset = this.scene.assets.getAsset('video-texture', this.data.assetId);
+            if (!asset) {
+                wx.showToast({
+                    icon: 'error',
+                    title: '视频播放失败',
+                });
+                console.warn('not found video');
+                return;
+            }
+
+            this.setData({ videoHeight: asset.height / asset.width, isLoaded: true });
+            this.scene.assets.getAsset('video-texture', this.data.assetId)?.play();
+            wx.showToast({
+                icon: 'none',
+                title: '请将相机对着识别图',
+            });
+        }
     }
 });

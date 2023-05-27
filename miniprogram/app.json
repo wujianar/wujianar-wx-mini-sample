@@ -2,7 +2,7 @@
     "pages": [
         "pages/index/index",
         "pages/xr-model/index",
-        "pages/xr-video/index",        
+        "pages/xr-video/index",
         "pages/basic-video/basic-video",
         "pages/basic-model/basic-model",
         "pages/basic-camera/basic-camera",
