@@ -26,6 +26,7 @@ Page({
         this.setData({
             width: sys.windowWidth,
             height: sys.windowHeight,
+            ratio: sys.pixelRatio,
         });
 
         // 识别请求成功后的回调

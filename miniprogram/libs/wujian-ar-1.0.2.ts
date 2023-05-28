@@ -46,7 +46,7 @@ export default class WuJianAR {
     }
 
     public version(): string {
-        return '1.0.1';
+        return '1.0.3';
     }
 
     public on(name: string, func: (msg: any) => void) {
@@ -274,10 +274,7 @@ export default class WuJianAR {
                         if (this.useSearch && !this.isSearching && (Date.now() - this.lastSearchTime) > this.config.interval) {
                             this.isSearching = true;
                             this.lastSearchTime = Date.now();
-                            const data = {
-                                image: this.capture(frame) || '',
-                            };
-                            this.search(data).then((msg: SearchResponse) => {
+                            this.search({ image: this.captureV2() || '' }).then((msg: SearchResponse) => {
                                 if (this.useSearch) {
                                     this.emit(WuJianAR.EVENT_SEARCH, msg);
                                 }
@@ -361,7 +358,7 @@ export default class WuJianAR {
 
         if (this.searchFrom !== WuJianAR.SEARCH_FROM_TRACKER) {
             this.startListener();
-        }        
+        }
     }
 
     /**
@@ -372,10 +369,10 @@ export default class WuJianAR {
         this.isSearching = false;
 
         if (this.searchFrom !== WuJianAR.SEARCH_FROM_TRACKER) {
-            this.listener?.stop();           
+            this.listener?.stop();
         }
-         // @ts-ignore
-         this.listener = null;
+        // @ts-ignore
+        this.listener = null;
     }
 
     private startListener() {
@@ -424,6 +421,10 @@ export default class WuJianAR {
         return this.canvas.toDataURL('image/jpeg', this.config.quantity || 0.7)?.split(',').pop();
     }
 
+    private captureV2(): string {
+        return this.gl.canvas.toDataURL('image/jpg', 0.7).split('base64,').pop() || '';
+    }
+
     /**
      * base64图片数据识别
      * @param data 
@@ -445,18 +446,18 @@ export default class WuJianAR {
      * @returns 
      */
     public searchByTakePhoto(): Promise<string> {
-        return new Promise((resolve, reject) => {            
+        return new Promise((resolve, reject) => {
             wx.createCameraContext().takePhoto({
                 quality: 'normal',
                 success: (res: any) => {
-                    wx.showToast({title: 'success'});
+                    wx.showToast({ title: 'success' });
                     this.searchByFile(res.tempImagePath).then(msg => {
                         this.emit(WuJianAR.EVENT_SEARCH, msg);
                     });
                     resolve(res.tempImagePath);
                 },
                 fail: err => {
-                    wx.showToast({title: 'error'});
+                    wx.showToast({ title: 'error' });
                     reject(err);
                 }
             });
@@ -469,7 +470,7 @@ export default class WuJianAR {
      * @returns 
      */
     public searchByFile(filename: string): Promise<SearchResponse> {
-        wx.showToast({title: 'sending'});
+        wx.showToast({ title: 'sending' });
         let data: any = null;
 
         try {
@@ -477,7 +478,7 @@ export default class WuJianAR {
             form.appendFile('file', filename);
             data = form.getData();
         } catch (e) {
-            wx.showToast({title: 'error'});
+            wx.showToast({ title: 'error' });
         }
 
 
