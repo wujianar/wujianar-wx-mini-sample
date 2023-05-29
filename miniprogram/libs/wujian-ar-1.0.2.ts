@@ -105,7 +105,6 @@ export default class WuJianAR {
             version: isV2 ? 'v2' : 'v1',
             gl: this.gl
         });
-
         return true;
     }
 
@@ -282,6 +281,8 @@ export default class WuJianAR {
                                 console.error(err);
                             });
                         }
+                    } else {
+                        console.error('获取相机图像错误')
                     }
 
                     this.session.requestAnimationFrame(onFrame);
