@@ -1,5 +1,7 @@
+import btoa from "./btoa";
 import { FormData } from "./form-data";
 import ThreeHelper from "./three-helper";
+import upng from "./UPNG";
 
 /**
  * 
@@ -282,7 +284,7 @@ export default class WuJianAR {
                             });
                         }
                     } else {
-                        console.error('获取相机图像错误')
+                        console.error('获取相机图像错误');
                     }
 
                     this.session.requestAnimationFrame(onFrame);
@@ -390,11 +392,7 @@ export default class WuJianAR {
             this.isSearching = true;
             this.lastSearchTime = Date.now();
 
-            const data = {
-                image: this.capture(frame) || '',
-            };
-
-            this.search(data).then((msg: SearchResponse) => {
+            this.search({ image: this.captureCamera(frame) }).then((msg: SearchResponse) => {
                 if (this.useSearch) {
                     this.emit(WuJianAR.EVENT_SEARCH, msg);
                 }
@@ -403,6 +401,11 @@ export default class WuJianAR {
             });
         });
         this.listener?.start();
+    }
+
+    private captureCamera(frame: WechatMiniprogram.OnCameraFrameCallbackResult): string {
+        const b = upng.encode([frame.data], frame.width, frame.height, 512);
+        return wx.arrayBufferToBase64(b) || '';
     }
 
     private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
@@ -496,6 +499,7 @@ export default class WuJianAR {
     private request(option: WechatMiniprogram.RequestOption): Promise<SearchResponse> {
         return new Promise((resolve, reject) => {
             option.url = `${this.config.endpoint}/search?track=1`;
+            // option.url = `http://192.168.31.180:3100/api/image`;
             option.method = 'POST';
             option.success = (res: any) => resolve(res.data);
             option.fail = (err: any) => reject(err);
