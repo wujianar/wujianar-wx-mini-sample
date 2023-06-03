@@ -1,6 +1,5 @@
 import pako from "./pako.min";
 
-console.info(pako);
 var UPNG = (function() {
 	
 	var _bin = {
@@ -443,7 +442,7 @@ var UPNG = (function() {
 })();
 
 
-var pngjs = (function() {
+(function() {
 	var _copyTile = UPNG._copyTile, _bin=UPNG._bin, paeth = UPNG._paeth;
 	var crcLib = {
 		table : ( function() {

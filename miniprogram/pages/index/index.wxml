@@ -55,6 +55,6 @@
 
     <view class="remark">
         <text class="title">提示：</text>
-        <text class="tip">本站提供的sample是演示云识别怎么使用及可以应用到什么场景，由于手机/PAD等版本众多，做不到全部兼容，如果您使用此sample代码，请自行考虑处理不同平台的兼容问题，谢谢支持。</text>
+        <text class="tip">本站提供的sample是演示云识别怎么使用及可以应用到什么场景，由于手机/PAD等版本众多，做不到全部兼容，如果您使用此sample代码，请自行考虑处理不同平台的兼容问题，谢谢支持。 官网: https://www.wujianar.com， 技术支持QQ群：722979533。</text>
     </view>
 </view>

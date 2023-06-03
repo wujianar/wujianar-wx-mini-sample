@@ -1,4 +1,3 @@
-import btoa from "./btoa";
 import { FormData } from "./form-data";
 import ThreeHelper from "./three-helper";
 import upng from "./UPNG";
@@ -275,7 +274,7 @@ export default class WuJianAR {
                         if (this.useSearch && !this.isSearching && (Date.now() - this.lastSearchTime) > this.config.interval) {
                             this.isSearching = true;
                             this.lastSearchTime = Date.now();
-                            this.search({ image: this.captureV2() || '' }).then((msg: SearchResponse) => {
+                            this.search({ image: this.captureVK()}).then((msg: SearchResponse) => {
                                 if (this.useSearch) {
                                     this.emit(WuJianAR.EVENT_SEARCH, msg);
                                 }
@@ -404,8 +403,13 @@ export default class WuJianAR {
     }
 
     private captureCamera(frame: WechatMiniprogram.OnCameraFrameCallbackResult): string {
-        const b = upng.encode([frame.data], frame.width, frame.height, 512);
-        return wx.arrayBufferToBase64(b) || '';
+        const sys = wx.getSystemInfoSync();
+        if (sys.platform == "android" && sys.version == "8.0.37") {
+            const b = upng.encode([frame.data], frame.width, frame.height, 512);
+            return wx.arrayBufferToBase64(b) || '';
+        }
+
+        return this.capture(frame);
     }
 
     private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
@@ -425,7 +429,7 @@ export default class WuJianAR {
         return this.canvas.toDataURL('image/jpeg', this.config.quantity || 0.7)?.split(',').pop();
     }
 
-    private captureV2(): string {
+    private captureVK(): string {
         return this.gl.canvas.toDataURL('image/jpg', 0.7).split('base64,').pop() || '';
     }
 
@@ -474,7 +478,6 @@ export default class WuJianAR {
      * @returns 
      */
     public searchByFile(filename: string): Promise<SearchResponse> {
-        wx.showToast({ title: 'sending' });
         let data: any = null;
 
         try {
@@ -499,7 +502,6 @@ export default class WuJianAR {
     private request(option: WechatMiniprogram.RequestOption): Promise<SearchResponse> {
         return new Promise((resolve, reject) => {
             option.url = `${this.config.endpoint}/search?track=1`;
-            // option.url = `http://192.168.31.180:3100/api/image`;
             option.method = 'POST';
             option.success = (res: any) => resolve(res.data);
             option.fail = (err: any) => reject(err);
