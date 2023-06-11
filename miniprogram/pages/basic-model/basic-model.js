@@ -28,7 +28,7 @@ Page({
             height: sys.windowHeight
         });
         // 识别请求成功后的回调
-        wuJianAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJianAR.on(WuJianAR.EVENT_SEARCH, (msg) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -42,13 +42,13 @@ Page({
 
             // 解析关联数据
             // 如：{code: 200, data: {name: "恐龙", uuid: "3ba85677176f49569364d958f5014fa1", brief: "{"modelUrl":"https://wujianar-cdn.oss-cn-hangzhou.aliyuncs.com/ardemo/models/kl.gltf","scale":0.07}"}, message: "succeed"}
-            const setting: ModelSetting = JSON.parse(msg.data.brief);
+            const setting = JSON.parse(msg.data.brief);
             this.showModel(setting);
 
         });
 
         // threejs 更新事件
-        threeHelper.on(ThreeHelper.EVENT_TICK, (delta: number) => {
+        threeHelper.on(ThreeHelper.EVENT_TICK, (delta) => {
             // console.info(delta);
         });
     },
@@ -72,7 +72,7 @@ Page({
         wuJianAR.dispose();
     },
     // 相机初始化完成，开启识别
-    cameraDone(e: any) {
+    cameraDone(e) {
         if (this.isCameraInitDone) {
             return;
         }
@@ -80,7 +80,7 @@ Page({
         this.isCameraInitDone = true;
         this.startSearch();
     },
-    onError(e: any) {
+    onError(e) {
         console.error(e);
         wx.showToast({ icon: 'error', title: e.detail.errMsg });
     },
@@ -92,7 +92,7 @@ Page({
         });
         this.startSearch();
     },
-    showModel(setting: ModelSetting) {
+    showModel(setting) {
         if (!setting.modelUrl) {
             wx.showToast({ title: '模型地址错误', icon: 'error' });
             this.startSearch();
@@ -103,7 +103,7 @@ Page({
         setting.scale *= 10;
         threeHelper.loadModel(setting).then(() => {
             console.info('loaded');
-        }).catch((err: ErrorMessage) => {
+        }).catch((err) => {
             console.info(err);
             wx.showToast({ title: err.message, icon: 'error' });
         });
@@ -124,7 +124,7 @@ Page({
             isShowBtnClose: true,
         });
     },
-    queryCanvas(target: string): Promise<any> {
+    queryCanvas(target) {
         return new Promise((resolve, reject) => {
             wx.createSelectorQuery()
                 .select(target)
@@ -138,15 +138,15 @@ Page({
     },
 
     /* 手势事件 START */
-    touchStart(e: any) {
+    touchStart(e) {
         // @ts-ignore
         this.canvas.dispatchTouchEvent(e,);
     },
-    touchMove(e: any) {
+    touchMove(e) {
         // @ts-ignore
         this.canvas.dispatchTouchEvent(e);
     },
-    touchEnd(e: any) {
+    touchEnd(e) {
         // @ts-ignore
         this.canvas.dispatchTouchEvent(e);
     },

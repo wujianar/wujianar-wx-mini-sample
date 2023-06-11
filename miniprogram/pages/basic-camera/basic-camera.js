@@ -24,7 +24,7 @@ Page({
         });
 
         // 识别请求成功后的回调
-        wuJinaAR.on(WuJinaAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJinaAR.on(WuJinaAR.EVENT_SEARCH, (msg) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -40,14 +40,14 @@ Page({
         wuJinaAR.dispose();
     },
     // 相机初始化完成，开启识别
-    cameraDone(e: any) {
+    cameraDone(e) {
         if (this.isCameraInitDone) {
             return;
         }
 
         this.isCameraInitDone = true;
     },
-    onError(e: any) {
+    onError(e) {
         console.info(e);
         wx.showToast({ icon: 'error', title: e.detail.errMsg });
     },

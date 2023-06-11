@@ -30,7 +30,7 @@ Page({
         });
 
         // 识别请求成功后的回调
-        wuJinaAR.on(WuJinaAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJinaAR.on(WuJinaAR.EVENT_SEARCH, (msg) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -47,7 +47,7 @@ Page({
             // 如：{code: 200, data: {name: "恐龙", uuid: "3ba85677176f49569364d958f5014fa1", brief: "{"modelUrl":"https://wujianar-cdn.oss-cn-hangzhou.aliyuncs.com/ardemo/models/kl.gltf","scale":0.07}"}, message: "succeed"}
             wuJinaAR.loadTrackingTarget(msg.data).then(() => {
                 wx.showToast({ title: '请将相机对着识别图' });
-            }).catch((err: ErrorMessage) => {
+            }).catch((err) => {
                 // console.info(err);
                 wx.showModal({title: '提示', content: JSON.stringify(err), showCancel: false});                
                 // wx.showToast({ icon: 'error', title: err.message });
@@ -61,7 +61,7 @@ Page({
         }
 
         // threejs使用的webgl canvas
-        this.queryCanvas('#three').then((target: any) => {
+        this.queryCanvas('#three').then((target) => {
             threeHelper.setCanvas(target);
         }).catch(err => {
             console.error(err);
@@ -70,7 +70,7 @@ Page({
         });
 
         // camera使用的webgl canvas
-        this.queryCanvas('#camera').then((target: any) => {
+        this.queryCanvas('#camera').then((target) => {
             // 打开跟踪功能
             wuJinaAR.openTracker(target);
             this.bindEvent();
@@ -88,12 +88,12 @@ Page({
     },
     bindEvent() {
         // threejs 帧更新事件
-        threeHelper.on(ThreeHelper.EVENT_TICK, (delta: number) => {
+        threeHelper.on(ThreeHelper.EVENT_TICK, (delta) => {
             // console.info(delta);
         });
 
         // 加载视频
-        wuJinaAR.on(WuJinaAR.EVENT_VIDEO, (setting: VideoSetting) => {
+        wuJinaAR.on(WuJinaAR.EVENT_VIDEO, (setting) => {
             this.setData({ videoUrl: setting.videoUrl });
         });
 
@@ -150,7 +150,7 @@ Page({
         });
     },
     // 视频加载成功，加入跟踪播放
-    videoMeta: async function (e: any) {
+    videoMeta: async function (e) {
         if (this.video) {
             return;
         }
@@ -162,15 +162,15 @@ Page({
         const canvas = await this.queryCanvas('#videoCanvas');
         wuJinaAR.setVideo({ video, width, height, canvas });
     },
-    videoError(e: any) {
+    videoError(e) {
         console.error(e);
         wx.showToast({ icon: 'error', title: '视频播放失败' });
     },
-    videoWaiting(e: any) {
+    videoWaiting(e) {
         console.info(e);
         // wx.showToast({ icon: 'none', title: '视频缓冲，请等待' });
     },
-    queryCanvas(target: string): Promise<any> {
+    queryCanvas(target) {
         return new Promise((resolve, reject) => {
             wx.createSelectorQuery()
                 .select(target)
@@ -182,7 +182,7 @@ Page({
                 }).exec();
         });
     },
-    queryContext(target: string): Promise<any> {
+    queryContext(target) {
         return new Promise((resolve, reject) => {
             wx.createSelectorQuery()
                 .select(target)

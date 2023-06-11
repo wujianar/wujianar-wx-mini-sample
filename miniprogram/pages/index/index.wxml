@@ -30,7 +30,7 @@
             </navigator>
         </view>
     </view>
-    <view class="nav">
+    <!-- <view class="nav">
         <view class="nav-title">xr-frame 追踪功能</view>
         <view class="nav-list">
             <navigator class="nav-item" url="../xr-video/index">
@@ -42,7 +42,7 @@
                 <text class="nav-icon"></text>
             </navigator>
         </view>
-    </view>
+    </view> -->
     <view class="nav">
         <view class="nav-title">案例展示</view>
         <view class="nav-list">

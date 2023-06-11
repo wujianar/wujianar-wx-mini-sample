@@ -24,7 +24,7 @@ Page({
         });
 
         // 识别请求成功后的回调
-        wuJinaAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
+        wuJinaAR.on(WuJianAR.EVENT_SEARCH, (msg) => {
             console.info(msg);
 
             // code为200时识别到目标，非200时为未识别到目标
@@ -37,10 +37,10 @@ Page({
     },
     onUnload() {
     },
-    cameraDone(e: any) {
+    cameraDone(e) {
         this.isCameraInitDone = true;
     },
-    onError(e: any) {
+    onError(e) {
         console.info(e);
         wx.showToast({ icon: 'error', title: e.detail.errMsg });
     },
@@ -51,7 +51,7 @@ Page({
         }
 
         wx.showLoading({ title: '识别中...' });
-        wuJinaAR.searchByTakePhoto().then((filename: string) => {
+        wuJinaAR.searchByTakePhoto().then((filename) => {
             this.setData({
                 imgSrc: filename
             });

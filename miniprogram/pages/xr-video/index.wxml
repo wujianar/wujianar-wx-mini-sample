@@ -1,4 +1,0 @@
-<view class="demo-title">xr-frame - 播放视频</view>
-<xr-video id="xr-video" useSearch="{{useSearch}}" width="{{width * ratio}}" height="{{height * ratio}}" style="width:{{width}}px;height:{{height}}px" bind:searchSuccess="onSearchSuccess" bind:arReady="onARReady"></xr-video>
-<scanning wx:if="{{isSearching}}"></scanning>
-<view wx:if="{{isShowBtnClose}}" class="btn-close" bindtap="removeVideo">X</view>
