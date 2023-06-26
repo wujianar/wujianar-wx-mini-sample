@@ -3,7 +3,7 @@
     <canvas type="webgl" id="camera" class="camera" width="{{width*ratio}}px" height="{{height*ratio}}px" style="width:{{width}}px;height:{{height}}px"></canvas>
     <canvas class="webgl" type="webgl" id="three" width="{{width*ratio}}px" height="{{height*ratio}}px" style="width:{{width}}px;height:{{height}}px"></canvas>
     <view class="offscreen-video" wx:if="{{videoUrl != ''}}">
-        <video id="video" src="{{videoUrl}}" loop="{{true}}" controls="{{false}}" autoplay="{{true}}" bindloadedmetadata="videoMeta" binderror="videoError" bindwaiting="videoWaiting"></video>
+        <video id="video" src="{{videoUrl}}" loop="{{true}}" controls="{{false}}" autoplay="{{false}}" bindloadedmetadata="videoMeta" binderror="videoError" bindwaiting="videoWaiting"></video>
         <canvas type="2d" id="videoCanvas"></canvas>
     </view>
 </view>
