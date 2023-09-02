@@ -201,7 +201,6 @@ export default class ThreeHelper {
             try {
                 // @ts-ignore
                 ctx.drawImage(cfg.video, 0, 0, cfg.width, cfg.height, 0, 0, cfg.canvas.width, cfg.canvas.height);
-
                 if (platform == 'ios') {
                     this.loadVideoIOS(cfg);
                 }
@@ -235,13 +234,19 @@ export default class ThreeHelper {
                 }
 
                 if (this.files.length > 3) {
-                    fs.unlinkSync(this.files.shift() || '');
+                    fs.unlink({
+                        filePath: this.files.shift() || '',
+                        fail: (res) => {
+                            console.error(res);
+                        }
+                    });
                 }
             } catch (e) {
                 console.warn(e);
             }
         });
     }
+
     private disposeVideo() {
         try {
             this.disposeModel();

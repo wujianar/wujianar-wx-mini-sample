@@ -264,25 +264,43 @@ export default class WuJianAR {
                     this.emit(WuJianAR.EVENT_LOST, anchors[0]);
                 });
 
-                const onFrame = (ts: number) => {
-                    const frame = this.session.getVKFrame(this.width, this.height);
-                    if (frame) {
-                        this.render(frame);
-                        this.emit(WuJianAR.EVENT_CAMERA, frame.camera);
+                // 限制调用帧率
+                const fpsInterval = 1000 / 30;
+                let last = Date.now();
 
-                        if (this.useSearch && !this.isSearching && (Date.now() - this.lastSearchTime) > this.config.interval) {
-                            this.isSearching = true;
-                            this.lastSearchTime = Date.now();
-                            this.search({ image: this.captureVK() }).then((msg: SearchResponse) => {
-                                if (this.useSearch) {
-                                    this.emit(WuJianAR.EVENT_SEARCH, msg);
-                                }
-                            }).catch(err => {
-                                console.error(err);
-                            });
-                        }
-                    } else {
+                const onFrame = (ts: number) => {
+                    const now = Date.now();
+                    const ms = now - last;
+
+                    // 如果未经过了足够的时间
+                    if (ms < fpsInterval) {
+                        this.session.requestAnimationFrame(onFrame);
+                        return;
+                    }
+
+                    // 校正当前时间
+                    last = now - (ms % fpsInterval);
+
+                    const frame = this.session.getVKFrame(this.width, this.height);
+                    if (!frame) {
                         console.error('获取相机图像错误');
+                        this.session.requestAnimationFrame(onFrame);
+                        return;
+                    }
+
+                    this.render(frame);
+                    this.emit(WuJianAR.EVENT_CAMERA, frame.camera);
+
+                    if (this.useSearch && !this.isSearching && (Date.now() - this.lastSearchTime) > this.config.interval) {
+                        this.isSearching = true;
+                        this.lastSearchTime = Date.now();
+                        this.search({ image: this.captureVK() }).then((msg: SearchResponse) => {
+                            if (this.useSearch) {
+                                this.emit(WuJianAR.EVENT_SEARCH, msg);
+                            }
+                        }).catch(err => {
+                            console.error(err);
+                        });
                     }
 
                     this.session.requestAnimationFrame(onFrame);
@@ -409,23 +427,6 @@ export default class WuJianAR {
         // @ts-ignore
         return canvas.toDataURL("image/jpeg", 0.7).split(',').pop();
     }
-
-    // private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
-    //     const width = 480;
-    //     const height = 640;
-
-    //     if (!this.canvas) {
-    //         this.canvas = wx.createOffscreenCanvas({ type: '2d', width, height });
-    //         this.ctx = this.canvas.getContext('2d');
-    //     }
-
-    //     const image = this.ctx.createImageData(width, height);
-    //     // @ts-ignore
-    //     image.data.set(new Uint8ClampedArray(frame.data || frame.getCameraBuffer(width, height)));
-    //     this.ctx.putImageData(image, 0, 0);
-    //     // @ts-ignore
-    //     return this.canvas.toDataURL('image/jpeg', this.config.quantity || 0.7)?.split(',').pop();
-    // }
 
     private captureVK(): string {
         return this.gl.canvas.toDataURL('image/jpg', 0.7).split('base64,').pop() || '';
