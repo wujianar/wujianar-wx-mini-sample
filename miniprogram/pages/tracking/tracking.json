@@ -1,5 +1,6 @@
 {
     "usingComponents": {
         "scanning": "../../components/scanning1/index"
-    }
+    },
+    "disableScroll": true
 }

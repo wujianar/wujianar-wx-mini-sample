@@ -1,6 +1,6 @@
 <view>
     <view class="demo-title">简单识别 - 播放视频</view>
-    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" style="width: 100%; height: {{height}}px;"></camera>
+    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" width="{{width}}px" height="{{height}}px" style="width: 100%; height: {{height}}px;"></camera>
 </view>
 <scanning wx:if="{{isSearching}}"></scanning>
 <view class="content" wx:if="{{videoUrl != ''}}">

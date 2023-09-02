@@ -1,5 +1,5 @@
 import ThreeHelper from "../../libs/three-helper";
-import WuJianAR from "../../libs/wujian-ar-1.0.2";
+import WuJianAR from "../../libs/wujian-ar";
 
 /**
  * 
@@ -25,7 +25,8 @@ Page({
         const sys = wx.getSystemInfoSync();
         this.setData({
             width: sys.windowWidth,
-            height: sys.windowHeight
+            height: sys.windowHeight,
+            ratio: sys.pixelRatio,
         });
         // 识别请求成功后的回调
         wuJianAR.on(WuJianAR.EVENT_SEARCH, (msg: SearchResponse) => {
@@ -140,7 +141,7 @@ Page({
     /* 手势事件 START */
     touchStart(e: any) {
         // @ts-ignore
-        this.canvas.dispatchTouchEvent(e,);
+        this.canvas.dispatchTouchEvent(e);
     },
     touchMove(e: any) {
         // @ts-ignore

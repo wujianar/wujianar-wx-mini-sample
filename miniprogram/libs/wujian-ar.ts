@@ -1,6 +1,5 @@
 import { FormData } from "./form-data";
 import ThreeHelper from "./three-helper";
-import upng from "./UPNG";
 
 /**
  * 
@@ -47,7 +46,7 @@ export default class WuJianAR {
     }
 
     public version(): string {
-        return '1.0.3';
+        return '1.0.4';
     }
 
     public on(name: string, func: (msg: any) => void) {
@@ -274,7 +273,7 @@ export default class WuJianAR {
                         if (this.useSearch && !this.isSearching && (Date.now() - this.lastSearchTime) > this.config.interval) {
                             this.isSearching = true;
                             this.lastSearchTime = Date.now();
-                            this.search({ image: this.captureVK()}).then((msg: SearchResponse) => {
+                            this.search({ image: this.captureVK() }).then((msg: SearchResponse) => {
                                 if (this.useSearch) {
                                     this.emit(WuJianAR.EVENT_SEARCH, msg);
                                 }
@@ -403,31 +402,30 @@ export default class WuJianAR {
     }
 
     private captureCamera(frame: WechatMiniprogram.OnCameraFrameCallbackResult): string {
-        const sys = wx.getSystemInfoSync();
-        if (sys.platform == "android" && sys.version == "8.0.37") {
-            const b = upng.encode([frame.data], frame.width, frame.height, 512);
-            return wx.arrayBufferToBase64(b) || '';
-        }
-
-        return this.capture(frame);
+        const canvas = wx.createOffscreenCanvas({ width: frame.width, height: frame.height, type: '2d' });
+        // @ts-ignore
+        const imgData = canvas.createImageData(new Uint8ClampedArray(frame.data), frame.width, frame.height);
+        canvas.getContext('2d').putImageData(imgData, 0, 0);
+        // @ts-ignore
+        return canvas.toDataURL("image/jpeg", 0.7).split(',').pop();
     }
 
-    private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
-        const width = 480;
-        const height = 640;
+    // private capture(frame: WechatMiniprogram.OnCameraFrameCallbackResult | WechatMiniprogram.VKFrame): string {
+    //     const width = 480;
+    //     const height = 640;
 
-        if (!this.canvas) {
-            this.canvas = wx.createOffscreenCanvas({ type: '2d', width, height });
-            this.ctx = this.canvas.getContext('2d');
-        }
+    //     if (!this.canvas) {
+    //         this.canvas = wx.createOffscreenCanvas({ type: '2d', width, height });
+    //         this.ctx = this.canvas.getContext('2d');
+    //     }
 
-        const image = this.ctx.createImageData(width, height);
-        // @ts-ignore
-        image.data.set(new Uint8ClampedArray(frame.data || frame.getCameraBuffer(width, height)));
-        this.ctx.putImageData(image, 0, 0);
-        // @ts-ignore
-        return this.canvas.toDataURL('image/jpeg', this.config.quantity || 0.7)?.split(',').pop();
-    }
+    //     const image = this.ctx.createImageData(width, height);
+    //     // @ts-ignore
+    //     image.data.set(new Uint8ClampedArray(frame.data || frame.getCameraBuffer(width, height)));
+    //     this.ctx.putImageData(image, 0, 0);
+    //     // @ts-ignore
+    //     return this.canvas.toDataURL('image/jpeg', this.config.quantity || 0.7)?.split(',').pop();
+    // }
 
     private captureVK(): string {
         return this.gl.canvas.toDataURL('image/jpg', 0.7).split('base64,').pop() || '';
@@ -458,7 +456,6 @@ export default class WuJianAR {
             wx.createCameraContext().takePhoto({
                 quality: 'normal',
                 success: (res: any) => {
-                    wx.showToast({ title: 'success' });
                     this.searchByFile(res.tempImagePath).then(msg => {
                         this.emit(WuJianAR.EVENT_SEARCH, msg);
                     });

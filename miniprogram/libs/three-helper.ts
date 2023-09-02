@@ -48,8 +48,7 @@ export default class ThreeHelper {
         this.scene.add(this.anchor);
 
         this.camera = new this.THREE.PerspectiveCamera(70, canvas.width / canvas.height, 0.1, 1000);
-        this.camera.position.set(0, 3, 10);
-        this.camera.lookAt(new this.THREE.Vector3(0, 3, 0));
+        this.initCamera();
         this.camera.matrixAutoUpdate = false;
 
         this.renderer = new this.THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -57,6 +56,12 @@ export default class ThreeHelper {
         this.renderer.setPixelRatio(wx.getSystemInfoSync().pixelRatio);
 
         this.render();
+    }
+
+    private initCamera() {
+        this.camera.rotation.set(0, 0, 0);
+        this.camera.position.set(0, 3, 10);
+        this.camera.lookAt(new this.THREE.Vector3(0, 3, 0));
     }
 
     private render() {
@@ -286,5 +291,8 @@ export default class ThreeHelper {
     public reset() {
         this.disposeModel();
         this.disposeVideo();
+
+        // 恢复到初始化的设置
+        this.initCamera();
     }
 }

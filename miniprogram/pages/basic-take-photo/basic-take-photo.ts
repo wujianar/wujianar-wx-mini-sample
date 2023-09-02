@@ -1,4 +1,4 @@
-import WuJianAR from "../../libs/wujian-ar-1.0.2";
+import WuJianAR from "../../libs/wujian-ar";
 
 /**
  * 
@@ -20,6 +20,7 @@ Page({
     onLoad() {
         const sys = wx.getSystemInfoSync();
         this.setData({
+            width: sys.windowWidth,
             height: sys.windowHeight,
         });
 

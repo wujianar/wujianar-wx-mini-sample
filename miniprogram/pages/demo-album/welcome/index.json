@@ -1,6 +1,4 @@
 {
-    "window": {
-        "disableScroll": true
-    },
+    "disableScroll": true,
     "navigationBarTitleText": "AR相册 唤醒回忆"
 }

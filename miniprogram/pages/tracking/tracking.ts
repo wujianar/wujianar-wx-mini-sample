@@ -1,5 +1,5 @@
 import ThreeHelper from "../../libs/three-helper";
-import WuJinaAR from "../../libs/wujian-ar-1.0.2";
+import WuJinaAR from "../../libs/wujian-ar";
 
 /**
  * 

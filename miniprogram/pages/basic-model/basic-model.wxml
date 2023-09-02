@@ -1,7 +1,7 @@
 <view>
     <view class="demo-title">简单识别 - 渲染模型</view>
-    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" style="width: 100%; height: {{height}}px;"></camera>
-    <canvas class="webgl" type="webgl" id="webgl" style="width:100%;height:{{height}}px"
+    <camera device-position="back" flash="off" mode="normal" resolution="meduim" frame-size="medium" binderror="onError" bindinitdone="cameraDone" width="{{width}}px" height="{{height}}px" style="width: 100%; height: {{height}}px;"></camera>
+    <canvas class="webgl" type="webgl" id="webgl" width="{{width * ratio}}px" height="{{height * ratio}}px" style="width: 100%; height: {{height}}px;"
         bindtouchstart="touchStart" bindtouchmove="touchMove" bindtouchend="touchEnd"
     ></canvas>
 </view>
