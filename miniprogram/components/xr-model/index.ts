@@ -70,7 +70,7 @@ Component({
             // 获取场景内容，并发到云识别服务
             // 如果是要获取相机内容，请查看xr-frame官方文档
             // @ts-ignore
-            const base64 = await this.scene.share.captureToDataURL({ type: 'jpg', quality: 0.7 });
+            const base64 = await this.scene.share.captureToDataURLAsync({ type: 'jpg', quality: 0.7 });
             wuJianAR.search({ image: base64.split('base64,').pop() }).then(msg => {
                 console.info(msg);
 
